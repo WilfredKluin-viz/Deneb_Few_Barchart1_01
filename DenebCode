@@ -1,0 +1,71 @@
+{
+  "hconcat": [
+    {
+      "width": 22,
+      "data": { "name": "dataset" },
+      "transform": [
+        { "calculate": "datum.Revenue < datum.Target", "as": "isBelowTarget" }
+      ],
+      "mark": { "type": "point", "shape": "circle", "filled": true, "size": 80, "color": "#f26e5f" },
+      "encoding": {
+        "y": {
+          "field": "Customer",
+          "type": "nominal",
+          "axis": null,
+          "scale": { "paddingInner": 0.35, "paddingOuter": 0.15 }
+        },
+        "x": { "value": 20 },
+        "opacity": {
+          "condition": { "test": "datum.isBelowTarget", "value": 1 },
+          "value": 0
+        }
+      }
+    },
+
+    {
+      "data": { "name": "dataset" },
+      "layer": [
+        {
+          "transform": [
+            { "calculate": "datum.Revenue < datum.Target", "as": "isBelowTarget" }
+          ],
+          "mark": { "type": "bar", "size": 12 },
+          "encoding": {
+            "y": {
+              "field": "Customer",
+              "type": "nominal",
+              "axis": { "title": null },
+              "scale": { "paddingInner": 0.35, "paddingOuter": 0.15 }
+            },
+            "x": {
+              "field": "Revenue",
+              "type": "quantitative",
+              "axis": { "title": null }
+            },
+            "color": {
+              "condition": {
+                "test": "datum.isBelowTarget",
+                "value": "#817860"          // below target
+              },
+              "value": "#cec09a"             // at/above target
+            }
+          }
+        },
+        {
+          "mark": { "type": "rule", "color": "#8a7f5e", "size": 2.67 },   // ≈ 2 pt
+          "encoding": {
+            "x": { "field": "Target", "type": "quantitative", "aggregate": "max" },
+            "tooltip": [
+              { "field": "Target", "aggregate": "max", "type": "quantitative", "title": "Max Target" }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": { "scale": { "y": "shared" } },
+  "config": {
+    "view": { "stroke": null },
+    "concat": { "spacing": 2 }
+  }
+}
